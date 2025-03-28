@@ -5,24 +5,8 @@ import styles from './page.module.css'
 
 export default function Home() {
 
-  async function fetchData() {
-    const res = await fetch("/api/hello");
-    const data = await res.json();
-    console.log(data);
-  }
 
-  async function jesuisbeau() {
-    const res = await fetch('/api/jesuisbeau');
-    const data = await res.json();
-    console.log(data);
 
-  }
-
-  async function newGet() {
-    const res = await fetch('/api/route.ts');
-    const data = await res.json;
-    console.log(data);
-  }
 
 
 
