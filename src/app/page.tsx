@@ -1,10 +1,11 @@
 "use client"
 
+import { useEffect } from 'react';
 import styles from './page.module.css'
+import EmailPopUpCollector from './components/emailPop/page';
 
 
 export default function Home() {
-
 
 
 
@@ -36,6 +37,8 @@ export default function Home() {
 
 
 
+
+
       </div>
       <div className={styles.hero_section}>
         <div className={styles.hero_section_principale_text}>
@@ -50,6 +53,9 @@ export default function Home() {
             The best way to be not bired of getting banned and wasting your potential
           </p>
         </div>
+
+        {/* <EmailPopUpCollector /> */}
+
         <div className={styles.footer_button_container}>
           <button
             className={styles.footer_ctaButton}
