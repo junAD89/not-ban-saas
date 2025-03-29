@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from 'react'
 import styles from './page.module.css'
 
@@ -28,26 +30,33 @@ const EmailPopUpCollector = () => {
 
     return (
         <main>
+
+            <div className={styles.topText}>
+                Enter Your emails to join beta user and get more features in preview
+            </div>
             <div className={styles.container}>
 
-                <input
-                    value={userEmail}
-                    onChange={(e) => setUserEmail(e.target.value)}
-                    className={styles.email_input}
-                    placeholder="Enter your email"
-                    type="text" />
+                <div >
+
+                    <input
+                        value={userEmail}
+                        onChange={(e) => setUserEmail(e.target.value)}
+                        className={styles.email_input}
+                        placeholder="Enter your email"
+                        type="text" />
+                </div>
+
+
+                <button
+                    onClick={
+
+                        () => console.log(userEmail)
+                    }
+                    className={styles.submit_button}
+                >
+                    Submit
+                </button>
             </div>
-
-
-            <button
-                onClick={
-
-                    () => console.log(userEmail)
-                }
-                className={styles.submit_button}
-            >
-                Submit
-            </button>
         </main>
     )
 }

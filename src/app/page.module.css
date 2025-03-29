@@ -55,13 +55,6 @@
 
 /* hero section css code  */
 
-.hero-section {
-    /* display: flex;
-    justify-content: space-between;
-    align-items: center; */
-    /* text-align: center; */
-
-}
 
 .hero-section {
     display: flex !important;
@@ -74,19 +67,22 @@
 
 .hero_section_principale_text {
     max-width: 800px;
-    /* Limite la largeur du texte */
     margin: 0 auto;
-    /* Centre le bloc de texte */
-    width: 350px;
+    text-align: center;
     height: 150px;
 }
 
 .hero_section_secondaire_text {
+    /* to align text in center  */
+    text-align: center;
+
     font-weight: 250;
+    font-size: 3rem;
     margin: 0 auto;
-    max-width: 200px;
+
+    /* max-width: 200px; */
     height: 300px;
-    font-size: 1rem;
+    font-size: 1.59rem;
 
     line-height: 1.5;
     padding: 0px;
@@ -115,11 +111,13 @@
 }
 
 .footer_ctaButton {
-
     margin: 0 auto;
     background-color: #FF4500;
     border-radius: 10px;
     width: 200px;
     text-align: center;
+    height: 54px;
+    margin-bottom: 250px;
+    position: absolute;
 
 }

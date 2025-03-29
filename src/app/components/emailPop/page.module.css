@@ -1,12 +1,42 @@
-.email_input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
+.container {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
 }
 
+
+
+.topText {
+    padding: 0 0;
+    margin: 30px;
+    white-space: nowrap;
+    /* white-space: wrap; */
+    line-height: 1.5;
+    text-align: center;
+
+    font-weight: 400;
+    font-size: 1.5rem;
+
+}
+
+.email_input {
+
+    outline: none;
+    width: 400px;
+    margin-right: 20px;
+    height: 50px;
+    padding: 10px;
+    border-radius: 5px;
+    /* border: 1px solid #ccc; */
+    margin-bottom: 10px;
+    background: rgba(225, 223, 223, 0.856);
+    color: #000;
+}
+
+
 .submit_button {
+    height: 50px;
+
     padding: 10px;
     border: none;
     background-color: #FF4500;
