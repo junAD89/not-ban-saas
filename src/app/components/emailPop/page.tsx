@@ -50,14 +50,17 @@ const EmailPopUpCollector = () => {
                 <button
                     onClick={
 
-                        () => console.log(userEmail)
+                        () => {
+                            console.log(userEmail);
+                            handleSubmit();
+                        }
                     }
                     className={styles.submit_button}
                 >
                     Submit
                 </button>
             </div>
-        </main>
+        </main >
     )
 }
 
