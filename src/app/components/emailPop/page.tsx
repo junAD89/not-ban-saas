@@ -19,12 +19,9 @@ const EmailPopUpCollector = () => {
                 email: userEmail,
                 createdAt: new Date(),
             });
-            console.log("doc add");
-
+            console.log("doc added with ID:", docRef.id); // Utilisation de docRef ici
         } catch (error) {
             console.error("error while adding doc", error);
-
-
         }
     }
 
