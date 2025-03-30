@@ -9,12 +9,13 @@ import { addDoc, collection } from "firebase/firestore";
 
 import { db } from '../config/firebase'
 import { Toaster, toast } from 'sonner';
-export default function registerEmail() {
 
+export default function RegisterEmail() {
     const [userEmail, setUserEmail] = useState('');
-    const [error, setError] = useState('');
 
-    const isValidEmail = (email: any) => {
+    // Nous avons supprimé la variable error non utilisée
+
+    const isValidEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
@@ -22,13 +23,12 @@ export default function registerEmail() {
 
     const handleSubmit = async () => {
         try {
-            setError('');
             // verification if the email is valid
             if (!isValidEmail(userEmail)) {
                 toast("Please enter a valid email address.");
                 return;
-
             }
+
             try {
                 const docRef = await addDoc(collection(db, "emails"), {
                     email: userEmail,
@@ -38,6 +38,7 @@ export default function registerEmail() {
             } catch (error) {
                 console.error("error while adding doc", error);
             }
+
             setUserEmail('');
             toast("Email added successfully!");
         } catch (error) {
@@ -54,14 +55,11 @@ export default function registerEmail() {
             <Toaster position="top-center" />
 
             <main className={styles.allContainer}>
-
                 <div className={styles.topText}>
                     Enter Your emails to join beta user and get more features in preview
                 </div>
                 <div className={styles.container}>
-
-                    <div >
-
+                    <div>
                         <input
                             value={userEmail}
                             onChange={(e) => setUserEmail(e.target.value)}
@@ -70,21 +68,17 @@ export default function registerEmail() {
                             type="email" />
                     </div>
 
-
                     <button
-                        onClick={
-
-                            () => {
-                                console.log(userEmail);
-                                handleSubmit();
-                            }
-                        }
+                        onClick={() => {
+                            console.log(userEmail);
+                            handleSubmit();
+                        }}
                         className={styles.submit_button}
                     >
                         Submit
                     </button>
                 </div>
-            </main >
+            </main>
         </motion.div>
     )
 }
