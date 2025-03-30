@@ -2,13 +2,14 @@
 
 import styles from './page.module.css'
 import EmailPopUpCollector from './components/emailPop/page';
+import { useState } from 'react';
 
 
 export default function Home() {
 
 
 
-
+  const [showPopUp, setShowPopUp] = useState(false)
 
   return (
     <div>
@@ -53,7 +54,10 @@ export default function Home() {
           </p>
         </div>
 
-        {/* <EmailPopUpCollector /> */}
+        {showPopUp &&
+          <EmailPopUpCollector />
+
+        }
 
         <div className={styles.footer_button_container}>
           <button
