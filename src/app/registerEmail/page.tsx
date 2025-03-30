@@ -9,7 +9,7 @@ import { addDoc, collection } from "firebase/firestore";
 
 import { db } from '../config/firebase'
 import { Toaster, toast } from 'sonner';
-const registerEmail = () => {
+export default function registerEmail() {
 
     const [userEmail, setUserEmail] = useState('');
     const [error, setError] = useState('');
@@ -88,5 +88,3 @@ const registerEmail = () => {
         </motion.div>
     )
 }
-
-export default registerEmail;
