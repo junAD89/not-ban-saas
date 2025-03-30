@@ -1,3 +1,20 @@
+// First, add the getRedditAccessToken function
+async function getRedditAccessToken() {
+    // You'll need to implement this with your Reddit API credentials
+    const response = await fetch('https://www.reddit.com/api/v1/access_token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + Buffer.from(`${process.env.REDDIT_CLIENT_ID}:${process.env.REDDIT_CLIENT_SECRET}`).toString('base64')
+        },
+        body: 'grant_type=client_credentials'
+    });
+
+    const data = await response.json();
+    return data.access_token;
+}
+
+// Then your existing function
 export async function checkIfUserIsBanned(username) {
     try {
         const accessToken = await getRedditAccessToken();
@@ -5,7 +22,7 @@ export async function checkIfUserIsBanned(username) {
         const response = await fetch(`https://oauth.reddit.com/user/${username}/about`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
-                'User-Agent': 'MyApp/1.0.0'
+                'User-Agent': 'NotBan/1.0.0 (by /u/your_reddit_username)'
             },
             cache: 'no-store'
         });

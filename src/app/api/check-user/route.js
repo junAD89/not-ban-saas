@@ -1,5 +1,5 @@
-// app/api/check-user/route.js
-import { checkIfUserIsBanned } from '@/lib/reddit';
+// Change this line
+import { checkIfUserIsBanned } from '../../../lib/reddit';
 import { NextResponse } from 'next/server';
 
 export async function GET(request) {
