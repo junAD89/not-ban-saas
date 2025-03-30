@@ -2,7 +2,6 @@
 
 import styles from './page.module.css'
 import EmailPopUpCollector from './components/emailPop/page';
-import { useState } from 'react';
 
 
 export default function Home() {
