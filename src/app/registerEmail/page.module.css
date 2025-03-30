@@ -1,7 +1,18 @@
+.allContainer {
+    top: 30vh;
+    align-items: center;
+    justify-content: center;
+    background-color: #767272;
+    border-radius: 20px;
+    left: 20vh;
+}
+
 .container {
     display: flex;
     align-items: baseline;
     justify-content: center;
+
+
 }
 
 
