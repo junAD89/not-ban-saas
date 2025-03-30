@@ -9,7 +9,7 @@ export default function Home() {
 
 
 
-  const [showPopUp, setShowPopUp] = useState(false)
+  const [showPopUp, _setShowPopUp] = useState(false)
 
   return (
     <div>
