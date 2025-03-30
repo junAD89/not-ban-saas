@@ -8,8 +8,7 @@ import { useState } from 'react';
 export default function Home() {
 
 
-
-  const [showPopUp, _setShowPopUp] = useState(false)
+  const showPopUp = false;
 
   return (
     <div>
