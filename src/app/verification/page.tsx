@@ -7,10 +7,16 @@ import { useState } from 'react';
 
 export default function Home() {
 
-    const [image, setImage] = useState<string | null>(null)
+    const [image, setImage] = useState<string | null>(null);
+
+    const [userName, setUserName] = useState('');
 
     const fetchScrenshot = async () => {
-        const response = await fetch("/api/screenshot?url=https://example.com");
+        if (!image) {
+            setImage(null)
+        }
+        // Call your API to take a screenshot of the page
+        const response = await fetch(`/api/screenshot?url=https://reddit.com/user/${userName}`);
         const data = await response.json();
         setImage(`data:image/png;base64,${data.screenshot}`);
     };
@@ -24,6 +30,12 @@ export default function Home() {
             transition={{ duration: 0.8 }}
         >
             <div>
+
+                <input type="text"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+
+                />
 
 
 
