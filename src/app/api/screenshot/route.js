@@ -6,10 +6,10 @@ export async function GET(req) {
         const { searchParams } = new URL(req.url);
         const url = searchParams.get("url") || "https://google.com";
 
-        // Determine environment (Vercel or local)
+        // Déterminer l'environnement (Vercel ou local)
         const isVercel = process.env.VERCEL === '1';
 
-        // Browser configuration options
+        // Options de configuration du navigateur
         const launchOptions = isVercel ? {
             executablePath: await chromium.executablePath(),
             args: [
@@ -28,45 +28,45 @@ export async function GET(req) {
             ]
         };
 
-        // Launch browser with configured options
+        // Lancer le navigateur avec les options configurées
         const browser = await puppeteer.launch(launchOptions);
 
-        // Create new page with additional settings
+        // Créer une nouvelle page avec des paramètres supplémentaires
         const page = await browser.newPage();
 
-        // Set viewport for consistency
+        // Définir la taille de la fenêtre pour plus de cohérence
         await page.setViewport({ width: 1280, height: 800 });
 
-        // Set additional headers to appear more like a regular browser
+        // Définir des en-têtes supplémentaires pour ressembler davantage à un navigateur normal
         await page.setExtraHTTPHeaders({
             'Accept-Language': 'en-US,en;q=0.9',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
             'Referer': 'https://www.google.com/'
         });
 
-        // Enable JavaScript
+        // Activer JavaScript
         await page.setJavaScriptEnabled(true);
 
-        // Navigate to URL with improved error handling
+        // Naviguer vers l'URL avec une meilleure gestion des erreurs
         try {
             await page.goto(url, {
                 waitUntil: 'networkidle2',
                 timeout: 30000
             });
 
-            // Wait a bit to let any client-side rendering complete
+            // Attendre un peu pour laisser le rendu côté client se terminer
             await page.waitForTimeout(2000);
 
-            // Take screenshot
+            // Prendre une capture d'écran
             const screenshot = await page.screenshot({
                 encoding: 'base64',
                 fullPage: true
             });
 
-            // Close browser
+            // Fermer le navigateur
             await browser.close();
 
-            // Return success response
+            // Renvoyer une réponse de succès
             return new Response(JSON.stringify({
                 success: true,
                 url: url,
@@ -80,13 +80,13 @@ export async function GET(req) {
                 },
             });
         } catch (pageError) {
-            console.error("Page navigation error:", pageError);
+            console.error("Erreur de navigation de page:", pageError);
 
-            // Try to get content anyway if page partially loaded
+            // Essayer d'obtenir du contenu même si la page n'est que partiellement chargée
             const screenshot = await page.screenshot({
                 encoding: 'base64',
                 fullPage: true
-            }).catch(e => null);
+            }).catch(() => null); // Correction ici : suppression du paramètre 'e' non utilisé
 
             await browser.close();
 
@@ -96,12 +96,12 @@ export async function GET(req) {
                 error: pageError.message,
                 screenshot
             }), {
-                status: 200, // Still return 200 if we got a partial screenshot
+                status: 200, // Renvoyer quand même 200 si nous avons une capture d'écran partielle
                 headers: { "Content-Type": "application/json" }
             });
         }
     } catch (error) {
-        console.error("Screenshot service error:", error);
+        console.error("Erreur du service de capture d'écran:", error);
 
         return new Response(JSON.stringify({
             success: false,
