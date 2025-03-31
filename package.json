@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sparticuz/chromium": "^133.0.0",
     "firebase": "^11.5.0",
     "framer-motion": "^12.6.2",
     "next": "15.2.4",
+    "puppeteer": "^24.4.0",
+    "puppeteer-core": "^24.4.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sonner": "^2.0.2"

@@ -3,13 +3,18 @@
 import Link from 'next/link';
 import styles from './page.module.css'
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 
 export default function Home() {
 
+  const [image, setImage] = useState<string | null>(null)
 
-
-
+  const fetchScrenshot = async () => {
+    const response = await fetch("/api/screenshot?url=https://example.com");
+    const data = await response.json();
+    setImage(`data:image/png;base64,${data.screenshot}`);
+  };
 
   return (
 
@@ -76,6 +81,12 @@ export default function Home() {
                 Get Started
               </Link>
             </button>
+
+
+            <div>
+              <button onClick={fetchScrenshot}>Prendre une capture</button>
+              {image && <img src={image} alt="Screenshot" />}
+            </div>
           </div>
         </div>
 
