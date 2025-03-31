@@ -6,62 +6,103 @@ export async function GET(req) {
         const { searchParams } = new URL(req.url);
         const url = searchParams.get("url") || "https://google.com";
 
-        // Déterminer si nous sommes sur Vercel ou en local
+        // Determine environment (Vercel or local)
         const isVercel = process.env.VERCEL === '1';
 
-        let browser;
+        // Browser configuration options
+        const launchOptions = isVercel ? {
+            executablePath: await chromium.executablePath(),
+            args: [
+                ...chromium.args,
+                '--disable-features=IsolateOrigins,site-per-process',
+                '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
+            ],
+            headless: true
+        } : {
+            headless: "new",
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-features=IsolateOrigins,site-per-process',
+                '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
+            ]
+        };
 
-        // Configuration différente selon l'environnement
-        if (isVercel) {
-            // Sur Vercel, utiliser @sparticuz/chromium
-            const executablePath = await chromium.executablePath();
-            browser = await puppeteer.launch({
-                executablePath,
-                args: chromium.args,
-                headless: true
-            });
-        } else {
-            // En local, utiliser puppeteer standard
-            browser = await puppeteer.launch({
-                headless: "new",
-                args: ['--no-sandbox', '--disable-setuid-sandbox']
-            });
-        }
+        // Launch browser with configured options
+        const browser = await puppeteer.launch(launchOptions);
 
-        // Ouvrir une nouvelle page
+        // Create new page with additional settings
         const page = await browser.newPage();
 
-        // Naviguer vers l'URL spécifiée avec un timeout suffisant
-        await page.goto(url, {
-            waitUntil: 'networkidle2',
-            timeout: 30000
+        // Set viewport for consistency
+        await page.setViewport({ width: 1280, height: 800 });
+
+        // Set additional headers to appear more like a regular browser
+        await page.setExtraHTTPHeaders({
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'Referer': 'https://www.google.com/'
         });
 
-        // Prendre la capture d'écran en base64
-        const screenshot = await page.screenshot({
-            encoding: 'base64',
-            fullPage: true
-        });
+        // Enable JavaScript
+        await page.setJavaScriptEnabled(true);
 
-        // Fermer le navigateur
-        await browser.close();
+        // Navigate to URL with improved error handling
+        try {
+            await page.goto(url, {
+                waitUntil: 'networkidle2',
+                timeout: 30000
+            });
 
-        // Renvoyer la capture d'écran en JSON
-        return new Response(JSON.stringify({
-            success: true,
-            screenshot
-        }), {
-            status: 200,
-            headers: {
-                "Content-Type": "application/json",
-                "Cache-Control": "s-maxage=60, stale-while-revalidate"
-            },
-        });
+            // Wait a bit to let any client-side rendering complete
+            await page.waitForTimeout(2000);
 
+            // Take screenshot
+            const screenshot = await page.screenshot({
+                encoding: 'base64',
+                fullPage: true
+            });
+
+            // Close browser
+            await browser.close();
+
+            // Return success response
+            return new Response(JSON.stringify({
+                success: true,
+                url: url,
+                timestamp: new Date().toISOString(),
+                screenshot
+            }), {
+                status: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Cache-Control": "s-maxage=60, stale-while-revalidate"
+                },
+            });
+        } catch (pageError) {
+            console.error("Page navigation error:", pageError);
+
+            // Try to get content anyway if page partially loaded
+            const screenshot = await page.screenshot({
+                encoding: 'base64',
+                fullPage: true
+            }).catch(e => null);
+
+            await browser.close();
+
+            return new Response(JSON.stringify({
+                success: false,
+                partial: !!screenshot,
+                error: pageError.message,
+                screenshot
+            }), {
+                status: 200, // Still return 200 if we got a partial screenshot
+                headers: { "Content-Type": "application/json" }
+            });
+        }
     } catch (error) {
-        console.error("Erreur lors de la prise de la capture d'écran:", error);
+        console.error("Screenshot service error:", error);
 
-        // Renvoyer une réponse d'erreur détaillée
         return new Response(JSON.stringify({
             success: false,
             error: error.message,

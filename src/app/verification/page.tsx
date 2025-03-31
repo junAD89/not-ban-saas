@@ -41,7 +41,7 @@ export default function Home() {
 
 
                 <div>
-                    <button onClick={fetchScrenshot}>Prendre une capture</button>
+                    <button onClick={fetchScrenshot}>Take a screenshot</button>
                     {image && <img src={image} alt="Screenshot" />}
                 </div>
             </div>
