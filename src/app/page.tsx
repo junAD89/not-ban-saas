@@ -47,6 +47,7 @@ export default function Home() {
 
 
 
+
         </div>
         <div className={styles.hero_section}>
           <div className={styles.hero_section_principale_text}>
